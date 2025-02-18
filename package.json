@@ -1,6 +1,6 @@
 {
   "name": "react-express-view",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A template engine for Express that allows rendering React components as server-side views.",
   "main": "index.js",
   "scripts": {
@@ -35,8 +35,8 @@
     "url": "git+https://github.com/abdanzamzam/react-express-view.git"
   },
   "files": [
-  "index.js",
-  "package.json",
-  "README.md"
-]
+    "index.js",
+    "package.json",
+    "README.md"
+  ]
 }
