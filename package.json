@@ -33,5 +33,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abdanzamzam/react-express-view.git"
-  }
+  },
+  "files": [
+  "index.js",
+  "package.json",
+  "README.md"
+]
 }
