@@ -44,21 +44,49 @@ Inside the `views` folder, create a file `Home.jsx`:
 
 ```jsx
 const React = require('react');
+const Counter = require('./components/Counter');
 
-const Home = (props) => {
+function Home(props) {
     return (
-        <html>
-            <head>
-                <title>{props.title}</title>
-            </head>
-            <body>
-                <h1>{props.message}</h1>
-            </body>
-        </html>
+        <div>
+            <h1>{props.title}</h1>
+            <p>{props.message}</p>
+            <Counter />
+        </div>
     );
-};
+}
 
 module.exports = Home;
+```
+
+Inside the `views/components` folder, create a file `Counter.jsx`:
+
+```jsx
+const React = require('react');
+const { useState } = require('react');
+
+function Counter() {
+    const [count, setCount] = useState(0);
+
+    const increment = () => {
+        setCount(count + 1);
+    };
+
+    const decrement = () => {
+        setCount(count - 1);
+    };
+
+    return (
+        <div>
+            <h1>Counter</h1>
+            <p>Current Count: {count}</p>
+            <button onClick={increment}>Increment</button>
+            <button onClick={decrement} style={{ marginLeft: '10px' }}>Decrement</button>
+        </div>
+    );
+}
+
+module.exports = Counter;
 ```
 
 ### 3. Client-side Hydration
