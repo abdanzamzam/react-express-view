@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+const React = require('react');
+const { useState } = require('react');
 
 function Counter() {
     const [count, setCount] = useState(0);
