@@ -1,6 +1,7 @@
 # React Express View
 
 React Express View is a template engine for Express that allows rendering React components as server-side views.
+
 For example project: https://github.com/abdanzamzam/react-express-view/tree/main/example
 
 ## Installation
