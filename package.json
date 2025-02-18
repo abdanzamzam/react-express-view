@@ -1,13 +1,17 @@
 {
   "name": "react-express-view",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A template engine for Express that allows rendering React components as server-side views.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "commonjs",
-  "keywords": ["express", "react", "template engine"],
+  "keywords": [
+    "express",
+    "react",
+    "template engine"
+  ],
   "author": "abdanzamzam",
   "license": "MIT",
   "dependencies": {
