@@ -122,6 +122,19 @@ module.exports = {
 };
 ```
 
+### 5. Babel Configuration
+
+Create a `babel.config.json` file in the project root:
+
+```json
+{
+    "presets": [
+        "@babel/preset-env",
+        "@babel/preset-react"
+    ]
+}
+```
+
 ## Configuration
 
 `react-express-view` provides several configurable options:
