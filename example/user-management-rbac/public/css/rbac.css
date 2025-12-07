@@ -1,0 +1,30 @@
+.rbac-app{display:flex;flex-direction:column;gap:16px}
+.role-switch{display:flex;align-items:center;gap:10px;border:1px solid #e5e7eb;border-radius:12px;padding:10px;background:#fafafa}
+.role-label{font-size:14px;color:#475569}
+.role-select{padding:8px 10px;border-radius:10px;border:1px solid #e5e7eb;background:#fff;color:#0f172a}
+.role-badge{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.role-badge.admin{background:#111827;color:#fff}
+.role-badge.manager{background:#2563eb;color:#fff}
+.role-badge.viewer{background:#64748b;color:#fff}
+.users-box{border:1px solid #e5e7eb;border-radius:14px;padding:16px;background:#fafafa}
+.users-header{margin-bottom:10px}
+.users-title{font-size:22px;font-weight:700;margin:0 0 4px;color:#0f172a}
+.users-subtitle{font-size:14px;color:#64748b;margin:0}
+.users-form{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.input{flex:1 1 220px;padding:10px 12px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;color:#0f172a}
+.select{padding:10px 12px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;color:#0f172a}
+.btn{padding:10px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;color:#0f172a;font-weight:600;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:#111827;color:#fff;border:none}
+.btn-secondary{background:#2563eb;color:#fff;border:none}
+.btn-danger{background:#ef4444;color:#fff;border:none}
+.users-list{margin-top:14px}
+.empty{color:#94a3b8;font-size:14px;margin:0}
+.table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden}
+.table th,.table td{border-bottom:1px solid #e5e7eb;padding:10px;text-align:left}
+.table thead th{background:#f8fafc;color:#334155;font-weight:600}
+.actions{display:flex;gap:8px}
+.badge{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.badge.admin{background:#111827;color:#fff}
+.badge.manager{background:#2563eb;color:#fff}
+.badge.viewer{background:#64748b;color:#fff}
