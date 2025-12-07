@@ -1,6 +1,6 @@
 {
   "name": "react-express-view",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A template engine for Express that allows rendering React components as client-side views.",
   "main": "index.js",
   "scripts": {
