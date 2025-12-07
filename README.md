@@ -1,6 +1,6 @@
 # React Express View
 
-React Express View is a template engine for Express that allows rendering React components as server-side views.
+React Express View is a template engine for Express that allows rendering React components as client-side views.
 
 For example project: https://github.com/abdanzamzam/react-express-view/tree/main/example
 
@@ -17,26 +17,29 @@ Here is an example of how to use `react-express-view` in an Express application.
 ### 1. Import and Configuration
 
 ```javascript
-const express = require('express');
-const path = require('path');
-const reactExpressView = require('react-express-view');
+const express = require("express");
+const path = require("path");
+const reactExpressView = require("react-express-view");
 
 const app = express();
 
 // Configure the engine and views folder
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jsx');
-app.engine('jsx', reactExpressView.createEngine());
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "jsx");
+app.engine("jsx", reactExpressView.createEngine());
 
 // Serve static files for client-side JavaScript
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
-app.get('/', (req, res) => {
-    res.render('Home', { title: 'Home Page', message: 'Welcome to the Home Page!' });
+app.get("/", (req, res) => {
+  res.render("Home", {
+    title: "Home Page",
+    message: "Welcome to the Home Page!",
+  });
 });
 
 app.listen(3000, () => {
-    console.log('Server is running at http://localhost:3000');
+  console.log("Server is running at http://localhost:3000");
 });
 ```
 
@@ -45,17 +48,17 @@ app.listen(3000, () => {
 Inside the `views` folder, create a file `Home.jsx`:
 
 ```jsx
-const React = require('react');
-const Counter = require('./components/Counter');
+const React = require("react");
+const Counter = require("./components/Counter");
 
 function Home(props) {
-    return (
-        <div>
-            <h1>{props.title}</h1>
-            <p>{props.message}</p>
-            <Counter />
-        </div>
-    );
+  return (
+    <div>
+      <h1>{props.title}</h1>
+      <p>{props.message}</p>
+      <Counter />
+    </div>
+  );
 }
 
 module.exports = Home;
@@ -64,27 +67,30 @@ module.exports = Home;
 Inside the `views/components` folder, create a file `Counter.jsx`:
 
 ```jsx
-import React, { useState } from 'react';
+const React = require("react");
+const { useState } = require("react");
 
 function Counter() {
-    const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
-    const increment = () => {
-        setCount(count + 1);
-    };
+  const increment = () => {
+    setCount(count + 1);
+  };
 
-    const decrement = () => {
-        setCount(count - 1);
-    };
+  const decrement = () => {
+    setCount(count - 1);
+  };
 
-    return (
-        <div>
-            <h1>Counter</h1>
-            <p>Current Count: {count}</p>
-            <button onClick={increment}>Increment</button>
-            <button onClick={decrement} style={{ marginLeft: '10px' }}>Decrement</button>
-        </div>
-    );
+  return (
+    <div>
+      <h1>Counter</h1>
+      <p>Current Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement} style={{ marginLeft: "10px" }}>
+        Decrement
+      </button>
+    </div>
+  );
 }
 
 module.exports = Counter;
@@ -95,30 +101,38 @@ module.exports = Counter;
 Inside the `client` folder, create a file `index.jsx`:
 
 ```jsx
-import React from 'react';
-import { hydrateRoot } from 'react-dom/client'; // React 18
+import React from "react";
+import { hydrateRoot } from "react-dom/client"; // React 18
 
 // Dynamic import to support CommonJS and ES Modules
-const components = {
-    Home: require('../views/Home'),
-};
+// Automatically register all components in the views directory
+const requireComponent = require.context("../views", true, /\.(js|jsx)$/);
+const components = {};
+
+requireComponent.keys().forEach((fileName) => {
+  // Extract component name from filename (e.g., ./Home.jsx -> Home)
+  const componentName = fileName
+    .split("/")
+    .pop()
+    .replace(/\.\w+$/, "");
+
+  components[componentName] = requireComponent(fileName);
+});
 
 // Retrieve the component name sent from the server
 const componentName = window.__INITIAL_COMPONENT__;
-const Component = components[componentName]?.default || components[componentName];
+const Component =
+  components[componentName]?.default || components[componentName];
 
 if (!Component) {
-    throw new Error(`Component "${componentName}" not found.`);
+  throw new Error(`Component "${componentName}" not found.`);
 }
 
 // Target root element
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById("root");
 
 // Perform rehydration
-hydrateRoot(
-    rootElement,
-    <Component {...window.__INITIAL_PROPS__} />
-);
+hydrateRoot(rootElement, <Component {...window.__INITIAL_PROPS__} />);
 ```
 
 ### 4. Webpack Configuration
@@ -126,28 +140,28 @@ hydrateRoot(
 In the project root, create a file `webpack.config.js`:
 
 ```javascript
-const path = require('path');
+const path = require("path");
 
 module.exports = {
-    entry: './client/index.jsx', // Entry point for React client-side
-    output: {
-        path: path.resolve(__dirname, 'public/js'),
-        filename: 'bundle.js', // Output file
-    },
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                },
-            },
-        ],
-    },
-    resolve: {
-        extensions: ['.js', '.jsx'],
-    },
+  entry: "./client/index.jsx", // Entry point for React client-side
+  output: {
+    path: path.resolve(__dirname, "public/js"),
+    filename: "bundle.js", // Output file
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+        },
+      },
+    ],
+  },
+  resolve: {
+    extensions: [".js", ".jsx"],
+  },
 };
 ```
 
@@ -157,10 +171,7 @@ Create a `babel.config.json` file in the project root:
 
 ```json
 {
-    "presets": [
-        "@babel/preset-env",
-        "@babel/preset-react"
-    ]
+  "presets": ["@babel/preset-env", "@babel/preset-react"]
 }
 ```
 
