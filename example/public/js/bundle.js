@@ -16,7 +16,7 @@
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ \"./node_modules/react-dom/client.js\");\nvar _components$component;\n\n // React 18\n\n// Dynamic import to support CommonJS and ES Modules\nvar components = {\n  Home: __webpack_require__(/*! ../views/Home */ \"./views/Home.jsx\")\n};\n\n// Retrieve the component name sent from the server\nvar componentName = window.__INITIAL_COMPONENT__;\nvar Component = ((_components$component = components[componentName]) === null || _components$component === void 0 ? void 0 : _components$component[\"default\"]) || components[componentName];\nif (!Component) {\n  throw new Error(\"Component \\\"\".concat(componentName, \"\\\" not found.\"));\n}\n\n// Target root element\nvar rootElement = document.getElementById('root');\n\n// Perform rehydration\n(0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.hydrateRoot)(rootElement, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Component, window.__INITIAL_PROPS__));\n\n//# sourceURL=webpack://example/./client/index.jsx?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ \"./node_modules/react-dom/client.js\");\nvar _components$component;\n\n // React 18\n\n// Dynamic import to support CommonJS and ES Modules\n// Automatically register all components in the views directory\nvar requireComponent = __webpack_require__(\"./views sync recursive \\\\.(js%7Cjsx)$\");\nvar components = {};\nrequireComponent.keys().forEach(function (fileName) {\n  // Extract component name from filename (e.g., ./Home.jsx -> Home)\n  var componentName = fileName.split('/').pop().replace(/\\.\\w+$/, '');\n  components[componentName] = requireComponent(fileName);\n});\n\n// Retrieve the component name sent from the server\nvar componentName = window.__INITIAL_COMPONENT__;\nvar Component = ((_components$component = components[componentName]) === null || _components$component === void 0 ? void 0 : _components$component[\"default\"]) || components[componentName];\nif (!Component) {\n  throw new Error(\"Component \\\"\".concat(componentName, \"\\\" not found.\"));\n}\n\n// Target root element\nvar rootElement = document.getElementById('root');\n\n// Perform rehydration\n(0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.hydrateRoot)(rootElement, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Component, window.__INITIAL_PROPS__));\n\n//# sourceURL=webpack://example/./client/index.jsx?");
 
 /***/ }),
 
@@ -105,6 +105,16 @@ eval("/**\n * @license React\n * scheduler.development.js\n *\n * Copyright (c) 
 
 "use strict";
 eval("\n\nif (false) {} else {\n  module.exports = __webpack_require__(/*! ./cjs/scheduler.development.js */ \"./node_modules/scheduler/cjs/scheduler.development.js\");\n}\n\n\n//# sourceURL=webpack://example/./node_modules/scheduler/index.js?");
+
+/***/ }),
+
+/***/ "./views sync recursive \\.(js%7Cjsx)$":
+/*!***********************************!*\
+  !*** ./views/ sync \.(js%7Cjsx)$ ***!
+  \***********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+eval("var map = {\n\t\"./Home.jsx\": \"./views/Home.jsx\",\n\t\"./components/Counter.jsx\": \"./views/components/Counter.jsx\"\n};\n\n\nfunction webpackContext(req) {\n\tvar id = webpackContextResolve(req);\n\treturn __webpack_require__(id);\n}\nfunction webpackContextResolve(req) {\n\tif(!__webpack_require__.o(map, req)) {\n\t\tvar e = new Error(\"Cannot find module '\" + req + \"'\");\n\t\te.code = 'MODULE_NOT_FOUND';\n\t\tthrow e;\n\t}\n\treturn map[req];\n}\nwebpackContext.keys = function webpackContextKeys() {\n\treturn Object.keys(map);\n};\nwebpackContext.resolve = webpackContextResolve;\nmodule.exports = webpackContext;\nwebpackContext.id = \"./views sync recursive \\\\.(js%7Cjsx)$\";\n\n//# sourceURL=webpack://example/./views/_sync_\\.(js%257Cjsx)$?");
 
 /***/ }),
 
