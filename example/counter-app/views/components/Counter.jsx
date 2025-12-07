@@ -13,11 +13,13 @@ function Counter() {
     };
 
     return (
-        <div>
-            <h1>Counter</h1>
-            <p>Current Count: {count}</p>
-            <button onClick={increment}>Increment</button>
-            <button onClick={decrement} style={{ marginLeft: '10px' }}>Decrement</button>
+        <div className="counter-box">
+            <h1 className="counter-title">Counter</h1>
+            <p className="counter-value">{count}</p>
+            <div className="counter-actions">
+                <button className="btn btn-primary" onClick={increment}>Increment</button>
+                <button className="btn btn-secondary" onClick={decrement}>Decrement</button>
+            </div>
         </div>
     );
 }

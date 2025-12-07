@@ -1,0 +1,45 @@
+.counter-box {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 16px;
+  background: #fafafa;
+}
+
+.counter-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #0f172a;
+}
+
+.counter-value {
+  font-size: 20px;
+  margin: 0 0 12px;
+  color: #334155;
+}
+
+.counter-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #0f172a;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #111827;
+  color: #fff;
+  border: none;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #111827;
+}
