@@ -84,7 +84,9 @@ app.listen(3000, () => {
 
 ### 2. Creating a React Component
 
-Inside the `views` folder, create a file `Home.jsx` (or `Home.tsx`):
+Inside the `views` folder, create a file `Home.jsx` (for JavaScript) or `Home.tsx` (for TypeScript).
+
+#### JavaScript (`Home.jsx`)
 
 ```jsx
 const React = require("react");
@@ -106,11 +108,39 @@ function Home(props) {
 module.exports = Home; // or export default Home;
 ```
 
+#### TypeScript (`Home.tsx`)
+
+```tsx
+import React, { useState } from "react";
+
+interface HomeProps {
+  title: string;
+  message: string;
+}
+
+function Home(props: HomeProps) {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <h1>{props.title}</h1>
+      <p>{props.message}</p>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+
+export default Home;
+```
+
 ### 3. Client-side Hydration
 
 To make the React components interactive on the client side, you need a client entry point.
 
-Inside the `client` folder, create `index.jsx` (or `index.tsx`):
+Inside the `client` folder, create `index.jsx` (for JavaScript) or `index.tsx` (for TypeScript).
+
+#### JavaScript (`index.jsx`)
 
 ```jsx
 import React from "react";
@@ -150,6 +180,58 @@ const rootElement = document.getElementById("root");
 
 // Perform rehydration
 if (rootElement) {
+  hydrateRoot(rootElement, <Component {...window.__INITIAL_PROPS__} />);
+}
+```
+
+#### TypeScript (`index.tsx`)
+
+```tsx
+import React from "react";
+import { hydrateRoot } from "react-dom/client";
+
+declare global {
+  interface Window {
+    __INITIAL_COMPONENT__: string;
+    __INITIAL_PROPS__: any;
+  }
+}
+
+// Dynamic import to support CommonJS and ES Modules
+// Automatically register all components in the views directory
+const requireComponent = require.context(
+  "../views",
+  true,
+  /\.(js|jsx|ts|tsx)$/
+);
+const components: { [key: string]: any } = {};
+
+requireComponent.keys().forEach((fileName: string) => {
+  // Extract component name from filename (e.g., ./Home.tsx -> Home)
+  const componentName = fileName
+    .split("/")
+    .pop()
+    ?.replace(/\.\w+$/, "");
+
+  if (componentName) {
+    components[componentName] = requireComponent(fileName);
+  }
+});
+
+// Retrieve the component name sent from the server
+const componentName = window.__INITIAL_COMPONENT__;
+const Component =
+  components[componentName]?.default || components[componentName];
+
+if (!Component) {
+  throw new Error(`Component "${componentName}" not found.`);
+}
+
+// Target root element
+const rootElement = document.getElementById("root");
+
+if (rootElement) {
+  // Perform rehydration
   hydrateRoot(rootElement, <Component {...window.__INITIAL_PROPS__} />);
 }
 ```
