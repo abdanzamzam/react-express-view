@@ -4,10 +4,9 @@
   "description": "Example Todo App using react-express-view",
   "main": "app.js",
   "scripts": {
-    "start": "node --watch app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:dev": "npx webpack --mode=development --watch",
-    "build:prod": "npx webpack --mode=production"
+    "start": "node server.js",
+    "build": "webpack --mode production",
+    "dev": "concurrently \"webpack --watch --mode development\" \"nodemon server.js\""
   },
   "keywords": [],
   "author": "",
@@ -15,11 +14,13 @@
   "type": "commonjs",
   "dependencies": {
     "express": "^4.21.2",
-    "react-express-view": "^1.0.0"
+    "react-express-view": "file:../../"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.26.3",
     "babel-loader": "^9.2.1",
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.11",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1"
   }

@@ -3,6 +3,7 @@
   "version": "1.0.3",
   "description": "A template engine for Express that allows rendering React components as client-side views.",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +18,7 @@
   "dependencies": {
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.28.5",
     "@babel/register": "^7.25.9",
     "babel-loader": "^9.2.1",
     "lodash.escaperegexp": "^4.1.2",
