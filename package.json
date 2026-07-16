@@ -1,33 +1,25 @@
 {
   "name": "react-express-view",
-  "version": "1.0.4",
-  "description": "A template engine for Express that allows rendering React components as client-side views.",
+  "version": "2.0.0",
+  "description": "A template engine for Express that renders React components as server-side views with client hydration. Supports JSX and TSX.",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
-  "type": "commonjs",
+
   "keywords": [
     "express",
     "react",
-    "template engine"
+    "template engine",
+    "ssr",
+    "server-side-rendering",
+    "jsx",
+    "tsx"
   ],
   "author": "abdanzamzam",
   "license": "MIT",
-  "dependencies": {
-    "@babel/preset-env": "^7.26.0",
-    "@babel/preset-react": "^7.26.3",
-    "@babel/preset-typescript": "^7.28.5",
-    "@babel/register": "^7.25.9",
-    "babel-loader": "^9.2.1",
-    "lodash.escaperegexp": "^4.1.2",
-    "object-assign": "^4.1.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "webpack": "^5.97.1",
-    "webpack-cli": "^6.0.1"
-  },
   "homepage": "https://github.com/abdanzamzam/react-express-view#readme",
   "bugs": {
     "url": "https://github.com/abdanzamzam/react-express-view/issues"
@@ -39,7 +31,27 @@
   "files": [
     "index.d.ts",
     "index.js",
-    "package.json",
     "README.md"
-  ]
+  ],
+  "dependencies": {
+    "@babel/register": "^7.25.9"
+  },
+  "peerDependencies": {
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.0.0",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@babel/preset-typescript": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "express": "^4.21.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vitest": "^3.2.7"
+  }
 }

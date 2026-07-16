@@ -1,56 +1,130 @@
 # React Express View
 
-React Express View is a template engine for Express that allows rendering React components as client-side views. It supports both JavaScript (`.jsx`) and TypeScript (`.tsx`).
+[![npm version](https://img.shields.io/npm/v/react-express-view)](https://www.npmjs.com/package/react-express-view)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-express-view)](https://bundlephobia.com/package/react-express-view)
+[![TypeScript](https://img.shields.io/badge/TypeScript-✅-blue)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-For example projects, check the `example` directory:
+> A template engine for Express that renders React components as server-side views with client hydration. Supports **JSX** and **TSX**.
 
-- [JavaScript Example](https://github.com/abdanzamzam/react-express-view/tree/main/example/counter-app)
-- [TypeScript Example](https://github.com/abdanzamzam/react-express-view/tree/main/example/typescript-app)
+---
 
-## Installation
+## Features
+
+- ✅ **Server-side rendering** — render React components to HTML on the server
+- ✅ **Client hydration** — interactive components after page load
+- ✅ **JSX & TSX** — supports JavaScript and TypeScript
+- ✅ **Hot reload** — auto-clear cache in development
+- ✅ **Customizable** — inject your own React instance, scripts, doctype
+- ✅ **Error resilience** — graceful error pages for dev and production
+- ✅ **XSS protection** — safe prop serialization
+- ✅ **TypeScript** — type definitions included
+- ✅ **Zero unnecessary deps** — only `@babel/register`
+
+## Install
 
 ```sh
 npm install react-express-view
 ```
 
-## Usage
+### Peer Dependencies
 
-### 1. Import and Configuration
+You need to install these alongside:
 
-To ensure compatibility and prevent "Invalid Hook Call" errors (due to multiple React instances), you should inject your application's `React` and `ReactDOMServer` instances into the engine.
+```sh
+npm install react react-dom @babel/preset-env @babel/preset-react
+# Only for TypeScript:
+npm install @babel/preset-typescript
+```
 
-#### JavaScript
+---
 
-```javascript
+## Quick Start
+
+### 1. Create your Express app
+
+```js
 const express = require("express");
 const path = require("path");
-const reactExpressView = require("react-express-view");
+const { createEngine } = require("react-express-view");
 
 const app = express();
 
-// Configure the engine and views folder
+// Configure the engine
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jsx");
-app.engine("jsx", reactExpressView.createEngine());
+app.engine("jsx", createEngine());
 
-// Serve static files for client-side JavaScript
+// Serve static files for client-side JS
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-  res.render("Home", {
-    title: "Home Page",
-    message: "Welcome to the Home Page!",
-  });
+  res.render("Home", { title: "Home", message: "Welcome!" });
 });
 
-app.listen(3000, () => {
-  console.log("Server is running at http://localhost:3000");
-});
+app.listen(3000);
 ```
 
-#### TypeScript
+### 2. Create a view component
 
-```typescript
+```jsx
+// views/Home.jsx
+const React = require("react");
+
+function Home(props) {
+  const [count, setCount] = React.useState(0);
+  return (
+    <div>
+      <h1>{props.title}</h1>
+      <p>{props.message}</p>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(c => c + 1)}>+</button>
+    </div>
+  );
+}
+
+module.exports = Home;
+```
+
+### 3. Client-side hydration
+
+```jsx
+// client/index.jsx
+import React from "react";
+import { hydrateRoot } from "react-dom/client";
+
+const Component = require("../views/Home.jsx").default || require("../views/Home.jsx");
+
+hydrateRoot(
+  document.getElementById("root"),
+  <Component {...window.__INITIAL_PROPS__} />
+);
+```
+
+### 4. Bundle with Webpack
+
+```sh
+npx webpack --entry ./client/index.jsx --output ./public/js/bundle.js
+```
+
+---
+
+## Configuration
+
+### `createEngine(options)`
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `doctype` | `string` | `<!DOCTYPE html>` | HTML doctype |
+| `transformViews` | `boolean` | `true` | Enable runtime Babel transpilation |
+| `babel` | `object` | — | Custom Babel config passed to `@babel/register` |
+| `React` | `object` | — | Inject your app's React instance (prevents Hook errors) |
+| `ReactDOMServer` | `object` | — | Inject your app's ReactDOMServer instance |
+| `clientScripts` | `string[]` | `["/js/bundle.js"]` | Client-side script URLs |
+
+### TypeScript
+
+```ts
 import express from "express";
 import path from "path";
 import { createEngine } from "react-express-view";
@@ -65,207 +139,62 @@ app.engine(
     transformViews: true,
     React: require("react"),
     ReactDOMServer: require("react-dom/server"),
+    clientScripts: ["/js/vendor.js", "/js/app.js"],
   })
 );
-
-app.use(express.static(path.join(__dirname, "public")));
-
-app.get("/", (req, res) => {
-  res.render("Home", {
-    title: "TypeScript App",
-    message: "Welcome to the TypeScript Example!",
-  });
-});
-
-app.listen(3000, () => {
-  console.log("Server is running at http://localhost:3000");
-});
 ```
 
-### 2. Creating a React Component
+---
 
-Inside the `views` folder, create a file `Home.jsx` (for JavaScript) or `Home.tsx` (for TypeScript).
+## Production Checklist
 
-#### JavaScript (`Home.jsx`)
+1. **Bundle client code** — use Webpack/Vite to compile `client/` → `public/js/bundle.js`
+2. **Pre-transpile views** — for production, consider pre-building instead of runtime Babel
+3. **Disable `transformViews`** in production if you pre-build:
 
-```jsx
-const React = require("react");
-const { useState } = require("react");
-
-function Home(props) {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div>
-      <h1>{props.title}</h1>
-      <p>{props.message}</p>
-      <p>Count: {count}</p>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
-    </div>
-  );
-}
-
-module.exports = Home; // or export default Home;
+```js
+createEngine({
+  transformViews: false,
+  React: require("react"),
+  ReactDOMServer: require("react-dom/server"),
+})
 ```
 
-#### TypeScript (`Home.tsx`)
+---
 
-```tsx
-import React, { useState } from "react";
+## Error Handling
 
-interface HomeProps {
-  title: string;
-  message: string;
+| Environment | Error output |
+|-------------|--------------|
+| `development` | Red error page with full stack trace |
+| `production` | User-friendly "Something went wrong" page |
+
+---
+
+## API
+
+```ts
+import { createEngine, EngineOptions, RenderFile } from "react-express-view";
+
+// Type definitions
+interface EngineOptions {
+  doctype?: string;
+  transformViews?: boolean;
+  babel?: Record<string, any>;
+  React?: typeof React;
+  ReactDOMServer?: any;
+  clientScripts?: string[];
 }
 
-function Home(props: HomeProps) {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div>
-      <h1>{props.title}</h1>
-      <p>{props.message}</p>
-      <p>Count: {count}</p>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
-    </div>
-  );
-}
-
-export default Home;
+type RenderFile = (
+  filename: string,
+  options: Record<string, any>,
+  cb: (err: Error | null, html?: string) => void
+) => void;
 ```
 
-### 3. Client-side Hydration
-
-To make the React components interactive on the client side, you need a client entry point.
-
-Inside the `client` folder, create `index.jsx` (for JavaScript) or `index.tsx` (for TypeScript).
-
-#### JavaScript (`index.jsx`)
-
-```jsx
-import React from "react";
-import { hydrateRoot } from "react-dom/client";
-
-// Dynamic import to support CommonJS and ES Modules
-// Automatically register all components in the views directory
-const requireComponent = require.context(
-  "../views",
-  true,
-  /\.(js|jsx|ts|tsx)$/
-);
-const components = {};
-
-requireComponent.keys().forEach((fileName) => {
-  // Extract component name from filename (e.g., ./Home.jsx -> Home)
-  const componentName = fileName
-    .split("/")
-    .pop()
-    .replace(/\.\w+$/, "");
-
-  // Handle default exports and named exports
-  components[componentName] =
-    requireComponent(fileName).default || requireComponent(fileName);
-});
-
-// Retrieve the component name sent from the server
-const componentName = window.__INITIAL_COMPONENT__;
-const Component = components[componentName];
-
-if (!Component) {
-  throw new Error(`Component "${componentName}" not found.`);
-}
-
-// Target root element
-const rootElement = document.getElementById("root");
-
-// Perform rehydration
-if (rootElement) {
-  hydrateRoot(rootElement, <Component {...window.__INITIAL_PROPS__} />);
-}
-```
-
-#### TypeScript (`index.tsx`)
-
-```tsx
-import React from "react";
-import { hydrateRoot } from "react-dom/client";
-
-declare global {
-  interface Window {
-    __INITIAL_COMPONENT__: string;
-    __INITIAL_PROPS__: any;
-  }
-}
-
-// Dynamic import to support CommonJS and ES Modules
-// Automatically register all components in the views directory
-const requireComponent = require.context(
-  "../views",
-  true,
-  /\.(js|jsx|ts|tsx)$/
-);
-const components: { [key: string]: any } = {};
-
-requireComponent.keys().forEach((fileName: string) => {
-  // Extract component name from filename (e.g., ./Home.tsx -> Home)
-  const componentName = fileName
-    .split("/")
-    .pop()
-    ?.replace(/\.\w+$/, "");
-
-  if (componentName) {
-    components[componentName] = requireComponent(fileName);
-  }
-});
-
-// Retrieve the component name sent from the server
-const componentName = window.__INITIAL_COMPONENT__;
-const Component =
-  components[componentName]?.default || components[componentName];
-
-if (!Component) {
-  throw new Error(`Component "${componentName}" not found.`);
-}
-
-// Target root element
-const rootElement = document.getElementById("root");
-
-if (rootElement) {
-  // Perform rehydration
-  hydrateRoot(rootElement, <Component {...window.__INITIAL_PROPS__} />);
-}
-```
-
-### 4. Bundling
-
-You will need a bundler like Webpack to compile your client-side code.
-
-#### `.babelrc` or `babel.config.json`
-
-Ensure you have the necessary presets:
-
-```json
-{
-  "presets": [
-    "@babel/preset-env",
-    "@babel/preset-react",
-    "@babel/preset-typescript"
-  ]
-}
-```
-
-> Note: `@babel/preset-typescript` is only required if you are using TypeScript.
-
-## Configuration
-
-`createEngine(options)` accepts the following options:
-
-- `doctype`: Defines the doctype for the output HTML (default: `<!DOCTYPE html>`).
-- `transformViews`: Enables runtime transpilation of views using `@babel/register` (default: `true`).
-- `React`: Pass your application's React instance (fixes Hook errors).
-- `ReactDOMServer`: Pass your application's ReactDOMServer instance.
-- `babel`: Custom Babel configuration object passed to `@babel/register`.
+---
 
 ## License
 
-This project is licensed under the MIT License.
+MIT © [Abdan Zam Zam Ramadhan](https://github.com/abdanzamzam)
