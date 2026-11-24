@@ -4,31 +4,36 @@
   "description": "Example RBAC User Management using react-express-view",
   "main": "app.js",
   "scripts": {
-    "start": "node --watch app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:dev": "npx webpack --mode=development --watch",
-    "build:prod": "npx webpack --mode=production"
+    "start": "node server.js",
+    "build": "webpack --mode production",
+    "dev": "concurrently \"webpack --watch --mode development\" \"nodemon server.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "express": "^4.21.2",
-    "react-express-view": "^1.0.0",
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
-    "bcryptjs": "^2.4.3",
+    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.1",
     "pg-hstore": "^2.3.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-express-view": "file:../../..",
     "sequelize": "^6.37.3"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.26.3",
+    "@babel/register": "^7.26.0",
     "babel-loader": "^9.2.1",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9",
+    "sequelize-cli": "^6.6.2",
     "webpack": "^5.97.1",
-    "webpack-cli": "^6.0.1",
-    "sequelize-cli": "^6.6.2"
+    "webpack-cli": "^6.0.1"
   }
 }
